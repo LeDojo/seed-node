@@ -1,0 +1,14 @@
+extends layout 
+block content 
+  section.container
+    h1.center Travels Available
+    each travel in travels
+      .card
+        .card-image
+          img.img-responsive(src='/images/199-wallpaper.jpg')
+        .card-header
+          .card-title.h5= travel.destination
+          .card-subtitle.text-gray= travel.price
+        .card-body
+        a.btn.btn-primary(href=`/travels/${travel.id}`) See details on
+ 

@@ -15,6 +15,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "pug": "^3.0.2",
+    "spectre.css": "^0.5.9",
     "volleyball": "^1.5.1"
   }
 }
