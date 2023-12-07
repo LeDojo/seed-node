@@ -1,3 +1,5 @@
+import Travel from "../models/travelModel";
+
 const travels = [
   {
     id: 1,
@@ -26,52 +28,66 @@ const travels = [
 ];
 const getAllTravels = async (req, res) => {
   try {
-    let allTravels = await travels;
-    res.render('travels', {travels: allTravels});
+    let allTravels = await Travel.find();
+    res.render("travels", { travels: allTravels });
   } catch (error) {
     console.error({ message: error.message });
   }
 };
 const getTravel = async (req, res) => {
   const id = req.params.id;
-
   try {
-    const travel = await travels.find((travel) => travel.id === Number(id));
-    if (travel) res.json(travel);
-    else res.status(404).json({ message: "Travel not found" });
+    const travel = await Travel.findOne({ _id: id });
+    res.render("travel", { travel: travel });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 const postTravel = async (req, res) => {
   try {
-    const newTravel = await req.body;
-    travels.push(newTravel);
+    const newTravel = await new Travel(req.body);
+    newTravel.save();
     res.status(201).json({ message: "Travel added successfully", newTravel });
   } catch (error) {
     console.error({ message: error.message });
   }
 };
+const getEdit = async (req, res) => {
+  const id = req.params.id;
+  try {
+    let travel = await Travel.findOne({ _id: id });
+    console.log(travel.description, travel.price);
+    res.render("edit", { travel: travel });
+  } catch (error) {
+    res.json({ message: "Travel not found", ERROR: error.message });
+  }
+};
 const putTravel = async (req, res) => {
   const id = req.params.id;
   try {
-    const updatedTravel = await req.body;
-    const index = travels.findIndex((t) => t.id === id);
-    travels[index] = updatedTravel;
-    res.json({ message: "Travel updated successfully", updatedTravel });
+    const updatedTravel = await Travel.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+    });
+    res.redirect("/travels/all");
   } catch (error) {
     res.status(404).json({ message: "Travel not found", ERROR: error.message });
   }
 };
 const deleteTravel = async (req, res) => {
   const id = req.params.id;
-  const index = await travels.findIndex((travel) => travel.id === id);
   try {
-    const deletedTravel = travels.splice(index, 1);
-    res.json({ message: "Travel deleted successfully", deletedTravel });
+    await Travel.findOneAndDelete({ _id: id });
+    res.redirect("/travels/all");
   } catch (error) {
     console.error(error.message);
   }
 };
 
-export { getAllTravels, getTravel, postTravel, putTravel, deleteTravel };
+export {
+  getAllTravels,
+  getTravel,
+  postTravel,
+  putTravel,
+  deleteTravel,
+  getEdit,
+};

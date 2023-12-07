@@ -1,0 +1,20 @@
+extends layout 
+block content
+  section.container
+    h1.center Modifier le Voyage
+    form(action=`/travels/${travel._id}?_method=PUT`, method='POST')
+      label(for='destination') Destination:
+      input(type='text', id='destination', name='destination', value=travel.destination, required)
+
+      label(for='description') Description:
+      textarea(id='description', name='description', rows='4', required)= travel.description
+
+      label(for='price') Prix:
+      input(type='number', id='price', name='price', value=travel.price, required)
+
+      button(type='submit') Sauvegarder
+
+      form(action=`/travels/${travel._id}/destroy?_method=DELETE`, method='POST')
+        button(type='submit' style='margin-top: 10px;') Supprimer 
+        
+      

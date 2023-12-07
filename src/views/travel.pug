@@ -1,0 +1,12 @@
+extends layout
+block content 
+ section.container
+  img(src=`${travel.image}`, alt="")
+  h1.center #{travel.destination}
+  p= travel.description
+  p Prix: #{travel.price} €
+  a(href="/travels/all") Retour à la listes des voyages 
+  br
+  button 
+    a(href=`/travels/${travel._id}/edit`) Editer mes données
+  
